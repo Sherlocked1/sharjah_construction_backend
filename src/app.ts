@@ -4,6 +4,7 @@ import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
 import constructionSockets from './sockets/constructionSockets';
+import usersRouter from './routes/user';
 
 class App {
     public app: Application;
@@ -22,6 +23,7 @@ class App {
         this.connectToDatabase();
         this.initializeMiddlewares();
         this.initializeSockets();
+        this.initializeRoutes();
     }
 
     private async connectToDatabase() {
@@ -49,6 +51,10 @@ class App {
 
     private initializeSockets() {
         constructionSockets(this.io);
+    }
+
+    private initializeRoutes(){
+        this.app.use('/api/users', usersRouter);
     }
 
     public start() {
