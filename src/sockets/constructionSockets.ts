@@ -61,16 +61,14 @@ export default (io: Server) => {
                 //2 seconds delay to simulate payment processing
                 setTimeout(() => {
                     const newRequest = new constructionModels(model.constructionRequest)
-
                     //save the card and emit a successful payment event back to the specific user
                     //and emit a request addition to all users
                     newRequest.save().then(() => {
                         io.emit('requestAdded', model.constructionRequest);
+                        io.to(socket.id).emit('paymentSuccess');
                     }).catch((error: Error) => {
                         console.warn(error);
                     });
-
-                    io.to(socket.id).emit('paymentSuccess');
                 }, 2000);
             });
 
